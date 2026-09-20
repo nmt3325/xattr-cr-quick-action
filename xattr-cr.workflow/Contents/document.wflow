@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>528</string>
+	<key>AMApplicationVersion</key>
+	<string>2.10</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.string</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>2.0.3</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>COMMAND_STRING</key>
+					<dict/>
+					<key>CheckedForUserDefaultShell</key>
+					<dict/>
+					<key>inputMethod</key>
+					<dict/>
+					<key>shell</key>
+					<dict/>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.string</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run Shell Script.action</string>
+				<key>ActionName</key>
+				<string>Run Shell Script</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>COMMAND_STRING</key>
+					<string>LOG="$HOME/Library/Logs/xattr-cr-QuickAction.log"
+mkdir -p "$(dirname "$LOG")" 2&gt;/dev/null || true
+printf '%s start argc=%s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$#" &gt;&gt; "$LOG" 2&gt;/dev/null
+
+if [ "$#" -eq 0 ]; then
+    /usr/bin/logger -t xattr-cr-QuickAction "no input" 2&gt;/dev/null
+    /usr/bin/osascript -e 'display notification "項目を受け取れませんでした" with title "xattr -cr"' &gt;/dev/null 2&gt;&amp;1 &amp;
+    exit 1
+fi
+
+ok=0
+failed=0
+for item in "$@"; do
+    if /usr/bin/xattr -cr "$item" 2&gt;&gt; "$LOG"; then
+        ok=$((ok + 1))
+        printf '%s OK %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$item" &gt;&gt; "$LOG" 2&gt;/dev/null
+    else
+        failed=$((failed + 1))
+        printf '%s NG %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$item" &gt;&gt; "$LOG" 2&gt;/dev/null
+    fi
+done
+
+/usr/bin/logger -t xattr-cr-QuickAction "complete ok=$ok failed=$failed" 2&gt;/dev/null
+if [ "$failed" -gt 0 ]; then
+    /usr/bin/osascript -e 'display notification "一部の項目で削除に失敗しました。ログを確認してください" with title "xattr -cr"' &gt;/dev/null 2&gt;&amp;1 &amp;
+    exit 1
+fi
+/usr/bin/osascript -e 'display notification "拡張属性を削除しました" with title "xattr -cr"' &gt;/dev/null 2&gt;&amp;1 &amp;
+exit 0</string>
+					<key>CheckedForUserDefaultShell</key>
+					<true/>
+					<key>inputMethod</key>
+					<integer>1</integer>
+					<key>shell</key>
+					<string>/bin/zsh</string>
+					<key>source</key>
+					<string>#!/bin/zsh
+LOG="$HOME/Library/Logs/xattr-cr-QuickAction.log"
+mkdir -p "$(dirname "$LOG")" 2&gt;/dev/null || true
+printf '%s start argc=%s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$#" &gt;&gt; "$LOG" 2&gt;/dev/null
+
+if [ "$#" -eq 0 ]; then
+    /usr/bin/logger -t xattr-cr-QuickAction "no input" 2&gt;/dev/null
+    /usr/bin/osascript -e 'display notification "項目を受け取れませんでした" with title "xattr -cr"' &gt;/dev/null 2&gt;&amp;1 &amp;
+    exit 1
+fi
+
+ok=0
+failed=0
+for item in "$@"; do
+    if /usr/bin/xattr -cr "$item" 2&gt;&gt; "$LOG"; then
+        ok=$((ok + 1))
+        printf '%s OK %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$item" &gt;&gt; "$LOG" 2&gt;/dev/null
+    else
+        failed=$((failed + 1))
+        printf '%s NG %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$item" &gt;&gt; "$LOG" 2&gt;/dev/null
+    fi
+done
+
+/usr/bin/logger -t xattr-cr-QuickAction "complete ok=$ok failed=$failed" 2&gt;/dev/null
+if [ "$failed" -gt 0 ]; then
+    /usr/bin/osascript -e 'display notification "一部の項目で削除に失敗しました。ログを確認してください" with title "xattr -cr"' &gt;/dev/null 2&gt;&amp;1 &amp;
+    exit 1
+fi
+/usr/bin/osascript -e 'display notification "拡張属性を削除しました" with title "xattr -cr"' &gt;/dev/null 2&gt;&amp;1 &amp;
+exit 0
+</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.RunShellScript</string>
+				<key>CFBundleVersion</key>
+				<string>2.0.3</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunShellScriptAction</string>
+				<key>InputUUID</key>
+				<string>AA4633B5-DDF7-40B6-9EC6-D17B463B42C4</string>
+				<key>Keywords</key>
+				<array>
+					<string>Shell</string>
+					<string>Script</string>
+					<string>Command</string>
+					<string>Run</string>
+					<string>Unix</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>9BE2F149-84DD-4E54-A10B-F6C316156159</string>
+				<key>UUID</key>
+				<string>79B8A650-5BA2-4772-9819-9693F16DC6E0</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict/>
+				<key>isViewVisible</key>
+				<integer>1</integer>
+				<key>location</key>
+				<string>309.000000:253.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict/>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>applicationBundleIDsByPath</key>
+		<dict/>
+		<key>applicationPaths</key>
+		<array/>
+		<key>inputTypeIdentifier</key>
+		<string>com.apple.Automator.fileSystemObject</string>
+		<key>outputTypeIdentifier</key>
+		<string>com.apple.Automator.nothing</string>
+		<key>presentationMode</key>
+		<integer>11</integer>
+		<key>processesInput</key>
+		<integer>0</integer>
+		<key>serviceApplicationBundleID</key>
+		<string>com.apple.finder</string>
+		<key>serviceApplicationPath</key>
+		<string>/System/Library/CoreServices/Finder.app</string>
+		<key>serviceInputTypeIdentifier</key>
+		<string>com.apple.Automator.fileSystemObject</string>
+		<key>serviceOutputTypeIdentifier</key>
+		<string>com.apple.Automator.nothing</string>
+		<key>serviceProcessesInput</key>
+		<integer>0</integer>
+		<key>systemImageName</key>
+		<string>NSActionTemplate</string>
+		<key>useAutomaticInputType</key>
+		<integer>0</integer>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.servicesMenu</string>
+	</dict>
+</dict>
+</plist>
